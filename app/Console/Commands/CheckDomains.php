@@ -18,8 +18,8 @@ class CheckDomains extends Command
         // 先获取需要检测的域名数量
         $total = Domain::where('status', 'active')->count();
         
-        // 动态计算锁定时间（20秒/个 × 安全系数1.2）
-        $lockSeconds = min(max($total * 20 * 1.2, 60), 86400); // 限制在1秒到24小时之间
+        // 动态计算锁定时间（25秒/个 × 安全系数1.2）
+        $lockSeconds = min(max($total * 25 * 1.2, 60), 86400); // 限制在1分钟到24小时之间
         
         $lock = Cache::lock('domain_check_lock', $lockSeconds);
 
@@ -48,7 +48,7 @@ class CheckDomains extends Command
                             if ($response->successful()) {
                                 $result = $response->json();
                                 
-                                $this->info("domain:".$domain->domain."result:".$response->body());
+                                $this->info(now()->format('Y-m-d H:i:s') . " domain:" . $domain->domain . " result:" . $response->body());
 
                                 // 根据接口文档假设返回格式：{"status":1} 表示正常
                                 if ($result['Code'] !== '102') {
@@ -67,10 +67,12 @@ class CheckDomains extends Command
                             ]);
                         }
                         
-                        // 计算实际耗时
+                        // 计算实际耗时并确保至少等待25秒
                         $elapsed = microtime(true) - $start;
-                        $sleep = max(20 - $elapsed, 0);
-                        sleep($sleep); // 精确控制间隔
+                        $sleep = max(25 - $elapsed, 0); // 使用25秒作为最小间隔
+                        if ($sleep > 0) {
+                            sleep($sleep);
+                        }
                     }
                 });
 
