@@ -42,7 +42,7 @@ class CheckDomains extends Command
                             $response = Http::timeout(15)
                                 ->get('http://wx.rrbay.com/pro/wxUrlCheck2.ashx', [
                                     'key' => $apiKey,
-                                    'url' => urlencode($domain->domain)
+                                    'url' => $domain->domain
                                 ]);
 
                                 $this->info(now()->format('Y-m-d H:i:s') . " domain:" . $domain->domain . " result:" . $response->body());
