@@ -19,12 +19,29 @@ class DomainResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('domain')
+                Forms\Components\Textarea::make('domain')
+                    ->label('域名')
                     ->required()
-                    ->maxLength(255)
-                    ->unique(ignoreRecord: true),
+                    ->placeholder('请输入域名，每行一个
+例如：
+example1.com
+example2.com
+example3.com')
+                    ->helperText('每行输入一个域名')
+                    ->rows(10)
+                    ->columnSpanFull()
+                    ->afterStateUpdated(function (string $state, Forms\Set $set) {
+                        // 清理输入，移除空行和重复行
+                        $domains = collect(explode("\n", $state))
+                            ->map(fn ($domain) => trim($domain))
+                            ->filter()
+                            ->unique()
+                            ->values()
+                            ->join("\n");
+                        
+                        $set('domain', $domains);
+                    }),
                 
-               
                 Forms\Components\Select::make('status')
                     ->options([
                         'active' => '正常',
@@ -32,8 +49,6 @@ class DomainResource extends Resource
                     ])
                     ->default('active')
                     ->required(),
-                
-                
             ]);
     }
 
@@ -58,7 +73,6 @@ class DomainResource extends Resource
                     }),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('status')
                     ->label('状态')
                     ->options([
@@ -73,8 +87,6 @@ class DomainResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

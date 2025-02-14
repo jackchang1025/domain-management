@@ -45,22 +45,19 @@ class CheckDomains extends Command
                                     'url' => urlencode($domain->domain)
                                 ]);
 
-                            if ($response->successful()) {
-                                $result = $response->json();
-                                
                                 $this->info(now()->format('Y-m-d H:i:s') . " domain:" . $domain->domain . " result:" . $response->body());
 
-                                // 根据接口文档假设返回格式：{"status":1} 表示正常
-                                if ($result['Code'] !== '102') {
-                                    $domain->update(['status' => 'expired']);
-                                    Log::info("域名检测失败：{$domain->domain}");
+                                Log::info("域名检测：{$domain->domain} body:{$response->body()}");
+
+                                if($response->successful()){
+                                    
+                                    $result = $response->json();
+                                
+                                    if ($result['Code'] === '101') {
+                                        $domain->update(['status' => 'expired']);
+                                    }
                                 }
 
-                            } else {
-                                Log::error("接口请求失败：{$domain->domain}", [
-                                    'status' => $response->status()
-                                ]);
-                            }
                         } catch (\Exception $e) {
                             Log::error("域名检测异常：{$domain->domain}", [
                                 'error' => $e->getMessage()
