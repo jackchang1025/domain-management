@@ -44,25 +44,26 @@ class DomainResource extends Resource
                 Tables\Columns\TextColumn::make('domain')
                     ->searchable(),
                 
-                
-                
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
+                    ->label('状态')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'active' => '正常',
+                        'expired' => '过期',
+                        default => $state,
+                    })
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
                         'expired' => 'danger',
-                        'pending' => 'warning',
                     }),
-                
-                
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('status')
+                    ->label('状态')
                     ->options([
-                        'active' => 'Active',
-                        'expired' => 'Expired',
-                        'pending' => 'Pending',
+                        'active' => '正常',
+                        'expired' => '过期',
                     ])
             ])
             ->actions([
