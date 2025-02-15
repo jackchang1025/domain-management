@@ -27,6 +27,7 @@ class CreateDomain extends CreateRecord
             $firstDomain = static::getModel()::create([
                 'domain' => $domains->first(),
                 'status' => $data['status'],
+                'group_id' => $data['group_id'],
             ]);
 
             // 创建其余域名记录
@@ -34,6 +35,7 @@ class CreateDomain extends CreateRecord
                 static::getModel()::create([
                     'domain' => $domain,
                     'status' => $data['status'],
+                    'group_id' => $data['group_id'],
                 ]);
             });
 

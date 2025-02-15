@@ -17,8 +17,12 @@ class RedirectController extends Controller
 
         // 如果队列为空，重新填充
         if (!$target) {
-            $domains = Domain::where('status', 'active')
-                ->orderBy('id')
+            // 按分组获取所有活跃域名
+            $domains = Domain::query()
+                ->with('group') // 预加载分组信息
+                ->where('status', 'active')
+                ->orderBy('group_id') // 首先按分组排序
+                ->orderBy('id') // 然后按域名ID排序
                 ->pluck('domain')
                 ->toArray();
 

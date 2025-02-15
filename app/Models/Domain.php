@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Redis;
 
 class Domain extends Model
@@ -13,12 +14,18 @@ class Domain extends Model
     protected $fillable = [
         'domain',
         'status',
+        'group_id',
     ];
 
     protected $casts = [
         'registered_at' => 'date',
         'expires_at' => 'date',
     ];
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class);
+    }
 
     protected static function boot(): void
     {
