@@ -34,14 +34,14 @@ class Domain extends Model
         // 监听删除事件
         static::deleted(function ($domain) {
             // 从Redis队列中移除域名
-            Redis::lrem(\App\Http\Controllers\RedirectController::QUEUE_KEY, 0, $domain->domain);
+            Redis::lrem(\App\Services\DomainRedirectService::QUEUE_KEY, 0, $domain->domain);
         });
 
         // 监听状态变更
         static::updated(function ($domain) {
             if ($domain->status === 'expired' && $domain->isDirty('status')) {
                 // 如果状态改为expired，也从队列中移除
-                Redis::lrem(\App\Http\Controllers\RedirectController::QUEUE_KEY, 0, $domain->domain);
+                Redis::lrem(\App\Services\DomainRedirectService::QUEUE_KEY, 0, $domain->domain);
             }
         });
     }
