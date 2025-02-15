@@ -13,15 +13,19 @@ class RedirectController extends Controller
         private DomainRedirectService $redirectService
     ) {}
 
-    public function redirectDomain(): RedirectResponse
+    public function redirectDomain(): RedirectResponse|\Illuminate\Http\Response
     {
-        try {
+        // 如果是OPTIONS请求直接返回空响应
+        if (request()->isMethod('OPTIONS')) {
+            return response()->noContent();
+        }
 
+        try {
             $domain = $this->redirectService->getRedirectDomain();
 
             //构建日志
             Log::info("Redirecting to {$domain}");
-            
+
             $prefix = Str::random(6);
             return redirect()->away("http://{$prefix}.{$domain}");
         } catch (\RuntimeException $e) {
