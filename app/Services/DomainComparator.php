@@ -33,4 +33,20 @@ class DomainComparator
         
         return trim($host, '/');
     }
+
+    public static function ensureProtocol(string $url, string $defaultProtocol = 'http://'): string
+    {
+        // 处理空值
+        if (empty(trim($url))) {
+            return $url;
+        }
+
+        // 检查是否已包含协议
+        if (!preg_match('~^(?:f|ht)tps?://~i', $url)) {
+            // 添加默认协议
+            $url = $defaultProtocol . ltrim($url, '/');
+        }
+
+        return $url;
+    }
 } 

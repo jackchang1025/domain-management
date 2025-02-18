@@ -69,4 +69,40 @@ class DomainComparatorTest extends TestCase
         $this->assertTrue(DomainComparator::equals('ex-ample.com', 'ex-ample.com'));
         $this->assertFalse(DomainComparator::equals('ex-ample.com', 'example.com'));
     }
+
+    public function test_ensure_protocol()
+    {
+        // 测试无协议的情况
+        $this->assertEquals(
+            'http://example.com',
+            DomainComparator::ensureProtocol('example.com')
+        );
+
+        // 测试已有http协议
+        $this->assertEquals(
+            'http://example.com',
+            DomainComparator::ensureProtocol('http://example.com')
+        );
+
+        // 测试已有https协议
+        $this->assertEquals(
+            'https://example.com',
+            DomainComparator::ensureProtocol('https://example.com')
+        );
+
+        // 测试带路径的情况
+        $this->assertEquals(
+            'http://example.com/path?query=1',
+            DomainComparator::ensureProtocol('example.com/path?query=1')
+        );
+
+        // 测试自定义协议
+        $this->assertEquals(
+            'ftp://example.com',
+            DomainComparator::ensureProtocol('ftp://example.com')
+        );
+
+        // 测试空值
+        $this->assertEquals('', DomainComparator::ensureProtocol(''));
+    }
 }

@@ -13,8 +13,6 @@ class ForageService
 {
     protected ForageConnector $connector;
 
-    protected ?bool $isLogin = null;
-
     public function __construct(protected string $account, protected string $password, protected string $cookieFile)
     {
         $this->connector = new ForageConnector();

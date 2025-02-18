@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Integrations\Forage\Data\Active;
 use Exception;
 use Illuminate\Console\Command;
 use App\Services\ForageService;
@@ -128,26 +129,31 @@ class Forage extends Command
         ForageService $service,
         Domain $activeDomain
     ): void {
+        
         $activeList->list->toCollection()
-            ->filter(function ($active) use ($domain) {
+            ->filter(function (Active $active) use ($domain) {
                 return DomainComparator::equals($active->jumpUrl, $domain->domain);
             })
-            ->each(function ($active) use ($service, $activeDomain) {
+            ->each(function (Active $active) use ($service, $activeDomain) {
                 $this->updateActiveRecord($active, $service, $activeDomain);
             });
     }
 
-    private function updateActiveRecord($active, ForageService $service, Domain $activeDomain): void
+    private function updateActiveRecord(Active $active, ForageService $service, Domain $domain): void
     {
         try {
+
+            $domainUrl = DomainComparator::ensureProtocol($domain->domain);
+
             $service->saveActive(SaveActive::from([
                 'activeid' => $active->id,
-                'url'      => $activeDomain->domain,
+                'url'      => $domainUrl,
                 'add_from' => $active->add_from,
                 'note'     => $active->note,
                 'coding'   => $active->coding,
             ]));
-            $this->handleLog("成功更新记录: {$active->domain}");
+
+            $this->handleLog("成功更新记录: {$domainUrl}");
         } catch (Exception $e) {
             $this->handleLog("更新记录失败: {$e->getMessage()}", 'error');
         }
