@@ -1,7 +1,9 @@
 <?php
 
+$account = env('FORAGE_ACCOUNT', '');
+
 return [
-    'account' => env('FORAGE_ACCOUNT', ''),
+    'account' => $account,
     'password' => env('FORAGE_PASSWORD', ''),
-    'cookie_file' => '',
+    'cookie_file' => storage_path("app/public/{$account}.json"),
 ];
