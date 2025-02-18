@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Redis;
 
+/**
+ * @property string $domain
+ * @property string $status
+ * @property int $group_id
+ * @property \Carbon\Carbon $registered_at
+ * @property \Carbon\Carbon $expires_at
+ */
 class Domain extends Model
 {
     use HasFactory;
