@@ -17,7 +17,7 @@ class SaveActive extends Data
         public string $type = 'jump',
         public string $isadd = '1',
         public int $is_check = 0,
-        public string $is_del = '4',
+        public string $is_del = '0',
         public string $ystype = 'jump',
         public string $refresh_qr = '1',
         public string $active_list_id = '1',

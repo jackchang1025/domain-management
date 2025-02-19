@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 use App\Services\DomainComparator;
 use JsonException;
 use RuntimeException;
+use App\Services\Integrations\Forage\Data\ActiveList;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
 
 class Forage extends Command
 {
@@ -31,8 +34,12 @@ class Forage extends Command
 
     /**
      * Execute the console command.
+     * @return void
+     * @throws FatalRequestException
+     * @throws JsonException
+     * @throws RequestException
      */
-    public function handle()
+    public function handle(): void
     {
         try {
             // 验证配置
@@ -43,6 +50,8 @@ class Forage extends Command
 
             // 获取需要处理的域名
             $expiredDomains = $this->getExpiredDomains();
+
+            // 获取正常域名
             $activeDomain   = $this->getActiveDomain();
 
             // 获取活跃域名列表
@@ -97,9 +106,15 @@ class Forage extends Command
         return $domain;
     }
 
-    private function getActiveList(ForageService $service)
+    /**
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws JsonException
+     */
+    private function getActiveList(ForageService $service): ActiveList
     {
         try {
+
             return $service->domainList();
         } catch (JsonException $e) {
             $this->handleLog('检测到登录失效，尝试重新登录...');
@@ -123,13 +138,8 @@ class Forage extends Command
         }
     }
 
-    private function processSingleDomain(
-        Domain $domain,
-        $activeList,
-        ForageService $service,
-        Domain $activeDomain
-    ): void {
-        
+    private function processSingleDomain(Domain $domain, ActiveList $activeList, ForageService $service, Domain $activeDomain): void
+    {
         $activeList->list->toCollection()
             ->filter(function (Active $active) use ($domain) {
                 return DomainComparator::equals($active->jumpUrl, $domain->domain);
@@ -146,11 +156,16 @@ class Forage extends Command
             $domainUrl = DomainComparator::ensureProtocol($domain->domain);
 
             $service->saveActive(SaveActive::from([
-                'activeid' => $active->id,
                 'url'      => $domainUrl,
+                'type'     => $active->type,
                 'add_from' => $active->add_from,
                 'note'     => $active->note,
+                'activeid' => $active->id,
                 'coding'   => $active->coding,
+                'is_check' => $active->is_check,
+                'is_del'   => $active->is_del,
+                'ystype'   => $active->type,
+                'active_list_id' => $active->active_list_id,
             ]));
 
             $this->handleLog("成功更新记录: {$domainUrl}");
