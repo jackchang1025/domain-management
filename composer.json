@@ -7,12 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-openssl": "*",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "saloonphp/pagination-plugin": "^2.2",
         "saloonphp/saloon": "^3.10",
         "spatie/laravel-data": "^4.13",
-        "ext-openssl": "*"
+        "symfony/dom-crawler": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
