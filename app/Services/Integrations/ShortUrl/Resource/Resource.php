@@ -33,7 +33,7 @@ class Resource
         return $this->connector->send(new CreateShortUrlRequest($url));
     }
 
-    public function listShortUrl(int $page = 1, string $duan, string $chang): Response
+    public function listShortUrl(int $page = 1, string $duan ='', string $chang = ''): Response
     {
         return $this->connector->send(new ListShortUrlRequest($page, $duan, $chang));
     }

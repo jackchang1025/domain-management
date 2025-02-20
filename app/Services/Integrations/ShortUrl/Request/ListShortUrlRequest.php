@@ -11,6 +11,7 @@ class ListShortUrlRequest extends Request implements Paginatable
     protected Method $method = Method::GET;
 
     public function __construct(
+        public int $page = 1,
         public string $duan = '',
         public string $chang = '',
     ) {
@@ -24,6 +25,7 @@ class ListShortUrlRequest extends Request implements Paginatable
     protected function defaultQuery(): array
     {
         return [
+            'p' => $this->page,
             'duan' => $this->duan,
             'chang' => $this->chang,
         ];
