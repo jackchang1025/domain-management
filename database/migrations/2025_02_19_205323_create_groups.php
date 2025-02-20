@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
@@ -14,19 +17,13 @@ return new class extends Migration
             $table->string('description')->nullable()->comment('分组描述');
             $table->timestamps();
         });
-
-        Schema::table('domains', function (Blueprint $table) {
-            $table->foreignId('group_id')->nullable()->constrained()->nullOnDelete();
-        });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::table('domains', function (Blueprint $table) {
-            $table->dropForeign(['group_id']);
-            $table->dropColumn('group_id');
-        });
-
         Schema::dropIfExists('groups');
     }
-}; 
+};
