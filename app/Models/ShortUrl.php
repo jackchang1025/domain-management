@@ -18,11 +18,4 @@ class ShortUrl extends Model
     protected $casts = [
         'last_synced_at' => 'datetime',
     ];
-
-    protected static function booted()
-    {
-        static::addGlobalScope('order', function ($builder) {
-            $builder->orderBy('id', 'desc');
-        });
-    }
 }

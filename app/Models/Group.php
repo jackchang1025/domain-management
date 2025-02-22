@@ -19,4 +19,4 @@ class Group extends Model
     {
         return $this->hasMany(Domain::class);
     }
-} 
+}

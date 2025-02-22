@@ -129,10 +129,4 @@ class ShortUrlService
             ShortUrl::whereNotIn('code', $apiCodes)->delete();
         });
     }
-
-    public function getLatestShortUrl(): ?ShortUrl
-    {
-        return ShortUrl::latest('id')->first();
-    }
-
 }

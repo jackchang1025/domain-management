@@ -22,7 +22,9 @@ class ShortUrlResource extends Resource
     
     protected static ?string $navigationIcon = 'heroicon-o-link';
     protected static ?string $navigationLabel = '短链管理';
-    
+
+    protected static ?string $navigationGroup = '短链管理';
+
     public static function table(Tables\Table $table): Tables\Table
     {
         return $table

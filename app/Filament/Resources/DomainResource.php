@@ -16,6 +16,8 @@ class DomainResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
     protected static ?string $navigationLabel = '域名管理';
 
+    protected static ?string $navigationGroup = '域名管理';
+
     public static function form(Form $form): Form
     {
         return $form

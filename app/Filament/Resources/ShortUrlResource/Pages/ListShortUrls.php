@@ -18,7 +18,7 @@ class ListShortUrls extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('新建短链'),
         ];
     }
 } 

@@ -16,6 +16,8 @@ class GroupResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-folder';
     protected static ?string $navigationLabel = '域名分组';
 
+    protected static ?string $navigationGroup = '域名管理';
+
     public static function form(Form $form): Form
     {
         return $form
