@@ -5,11 +5,12 @@ namespace App\Services\Integrations\Forage;
 use App\Services\Integrations\Forage\Resource\LoginResource;
 use App\Services\Integrations\Forage\Resource\DomainResource;
 use Saloon\Http\Connector;
-
+use App\Services\Integrations\Trait\HasLogger;
+use App\Services\Integrations\Trait\HasCookie;
 class ForageConnector extends Connector
 {
-    use HasCookie;
     use HasLogger;
+    use HasCookie;
 
     public function resolveBaseUrl(): string
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Integrations\Forage;
+namespace App\Services\Integrations\Trait;
 use Psr\Log\LoggerInterface;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Response;

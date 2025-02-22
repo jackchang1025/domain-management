@@ -4,12 +4,11 @@ namespace App\Services\Integrations\ShortUrl;
 
 use App\Services\Integrations\ShortUrl\Request\ListShortUrlRequest;
 use Saloon\Http\Connector;
-use App\Services\Integrations\Forage\HasCookie;
-use App\Services\Integrations\Forage\HasLogger;
+use App\Services\Integrations\Trait\HasLogger;
 use App\Services\Integrations\ShortUrl\Resource\Resource;
 use Saloon\PaginationPlugin\Contracts\HasPagination;
 use App\Services\Integrations\ShortUrl\Pagination\ShortUrlPaginator;
-
+use App\Services\Integrations\Trait\HasCookie;
 
 class ShortUrlConnector extends Connector implements HasPagination
 {
