@@ -6,6 +6,7 @@ use App\Filament\Resources\ChainResource;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
 use App\Services\AifabuService;
+use http\Exception\InvalidArgumentException;
 
 class CreateChain extends CreateRecord
 {
@@ -20,10 +21,20 @@ class CreateChain extends CreateRecord
             //string $targetUrl, int $groupId, string $domain = null, string $chainTitle = null, string $validTime = null
 
             $service = app(AifabuService::class);
+
+            $groupId = $data['group_id'] ?? null;
+            $domain = $data['domain'] ?? null;
+            $chainTitle = $data['chain_title'] ?? null;
+            $validTime = $data['valid_time'] ?? null;
+
+            if (empty($data['target_url'])) {
+                throw new InvalidArgumentException('目标URL不能为空');
+            }
+
             // 1. 先执行API创建
             $response = $service->getAifabuConnector()
                 ->getChainResource()
-                ->create($data['target_url'], $data['group_id'] ?? null, $data['domain'] ?? null, $data['chain_title'] ?? null, $data['valid_time'] ?? null);
+                ->create($data['target_url'], $groupId, $domain, $chainTitle, $validTime);
 
             if (!$response->successful() || empty($response->json('result'))) {
                 throw new \Exception('API调用失败：'.$response->body());
@@ -31,7 +42,7 @@ class CreateChain extends CreateRecord
 
             // 使用parse_url获取URL路径部分
             $render_url = $response->json('result.render_url');
-            $chain = parse_url($render_url, PHP_URL_PATH);
+            $chain = trim(parse_url($render_url, PHP_URL_PATH), '/');
 
             // 3. 返回新创建的本机记录
             return [
@@ -40,8 +51,8 @@ class CreateChain extends CreateRecord
                 'render_url' => $render_url,
                 'chain' => $chain,
                 'group_id' => $response->json('result.group_id'),
-                'domain' => $data['domain'],
-                'valid_time' => $data['valid_time'],
+                'domain' => $domain,
+                'valid_time' => $validTime,
             ];
 
         } catch (\Exception $e) {

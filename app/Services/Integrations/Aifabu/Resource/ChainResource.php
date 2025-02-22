@@ -2,18 +2,18 @@
 
 namespace App\Services\Integrations\Aifabu\Resource;
 
-use App\Services\Integrations\Aifabu\AifabuConnector;   
+use App\Services\Integrations\Aifabu\AifabuConnector;
 use Saloon\Http\Response;
 use App\Services\Integrations\Aifabu\Request\Chain\CreateChainRequest;
 use App\Services\Integrations\Aifabu\Request\Chain\DeleteChainRequest;
 use App\Services\Integrations\Aifabu\Request\Chain\EditChainRequest;
 use App\Services\Integrations\Aifabu\Request\Chain\ListChainRequest;
 
-class ChainResource 
+class ChainResource
 {
     public function __construct(protected AifabuConnector $connector){}
 
-    public function create(string $targetUrl, int $groupId, string $domain = null, string $chainTitle = null, string $validTime = null): Response
+    public function create(string $targetUrl, ?int $groupId = null, string $domain = null, string $chainTitle = null, string $validTime = null): Response
     {
         return $this->connector->send(new CreateChainRequest($targetUrl, $groupId, $domain, $chainTitle, $validTime));
     }

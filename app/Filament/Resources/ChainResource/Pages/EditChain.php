@@ -62,15 +62,10 @@ class EditChain extends EditRecord
                 throw new \Exception('API调用失败：'.$response->body());
             }
 
-            // 使用parse_url获取URL路径部分
-            $render_url = $response->json('result.render_url');
-            $chain = parse_url($render_url, PHP_URL_PATH);
-
             return [
                 'target_url' => $response->json('result.target_url'),
-                'render_url' => $render_url,
+                'render_url' => $response->json('result.render_url'),
                 'chain_title' => $data['chain_title'],
-                'chain' => $chain,
             ];
 
         }catch (\Exception $e) {

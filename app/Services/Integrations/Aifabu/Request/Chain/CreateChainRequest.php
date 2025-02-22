@@ -18,8 +18,8 @@ class CreateChainRequest extends Request  implements HasBody
         //跳转目标链接 必须以 http:// 或 https:// 开头的链接
         protected string $target_url,
         //短链分组id 获取短链分组接口中获取，不填则默认使用账号的首个分组
-        protected int $groupId,
-        //专属域名 
+        protected ?int $groupId = null,
+        //专属域名
         protected ?string $domain = null,
         //短链标题 不填则默认为'未命名'
         protected ?string $chain_title = null,

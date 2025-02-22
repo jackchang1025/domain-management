@@ -10,6 +10,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use App\Filament\Resources\ChainResource\Pages;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
+use App\Services\AifabuService;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Notifications\Notification as FilamentNotification;
+
 class ChainResource extends Resource
 {
     protected static ?string $model = Chain::class;
@@ -123,10 +131,61 @@ class ChainResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
+                DeleteAction::make()
+                    ->before(function (DeleteAction $action, Model $record) {
+
+                        try {
+
+                            $service = app(AifabuService::class);
+                            $response = $service->getAifabuConnector()
+                                ->getChainResource()
+                                ->delete([$record->chain]);
+
+                            if (!$response->successful()) {
+                                throw new \Exception("API删除失败：".$response->body());
+                            }
+
+                            return true;
+                        } catch (\Exception $e) {
+                            FilamentNotification::make()
+                                ->title($e->getMessage())
+                                ->danger()
+                                ->send();
+
+                            $action->halt();
+                        }
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->before(function (DeleteBulkAction $action, Collection $records) {
+
+                            try {
+
+                                $service = app(AifabuService::class);
+
+                                $response = $service->getAifabuConnector()
+                                    ->getChainResource()
+                                    ->delete($records->pluck('chain')->toArray());
+
+
+                                if (!$response->successful()) {
+                                    throw new \Exception("API删除失败：".$response->body());
+                                }
+
+                                return true;
+                            }catch (\Exception $e) {
+
+                                Notification::make()
+                                    ->title("删除失败")
+                                    ->body($e->getMessage())
+                                    ->danger()
+                                    ->send();
+
+                                $action->halt();
+                            }
+                        })
                 ]),
             ]);
     }
