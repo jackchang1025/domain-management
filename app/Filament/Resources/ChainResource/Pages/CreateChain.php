@@ -11,7 +11,9 @@ class CreateChain extends CreateRecord
 {
     protected static string $resource = ChainResource::class;
 
-    
+    protected static ?string $title = '创建短链';
+
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         try {

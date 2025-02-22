@@ -6,13 +6,14 @@ use App\Filament\Resources\ChainResource;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Database\Eloquent\Model;
 use App\Services\AifabuService;
 use Filament\Forms\Form;
 use Filament\Forms;
 class EditChain extends EditRecord
 {
     protected static string $resource = ChainResource::class;
+
+    protected static ?string $title = '修改短链';
 
     protected function getHeaderActions(): array
     {

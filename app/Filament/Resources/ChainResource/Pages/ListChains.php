@@ -15,12 +15,12 @@ class ListChains extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('新增'),
 
             Action::make('sync')
                     ->label('立即同步')
                     ->action(function (AifabuService $service) {
-                        
+
                         try {
                             $service->syncChain();
 
@@ -30,7 +30,7 @@ class ListChains extends ListRecords
                                 ->send();
 
                         } catch (\Exception $e) {
-                            
+
                             Notification::make()
                                 ->title('同步失败：'.$e->getMessage())
                                 ->danger()
@@ -40,4 +40,4 @@ class ListChains extends ListRecords
                     }),
         ];
     }
-} 
+}

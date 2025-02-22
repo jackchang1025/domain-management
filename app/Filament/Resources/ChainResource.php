@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\Chain;
+use App\Services\Integrations\Aifabu\Enums\ChainType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,28 +16,28 @@ class ChainResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-link';
     protected static ?string $navigationLabel = '链接管理';
     protected static ?string $navigationGroup = '爱链接';
-    
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                
+
                 Forms\Components\TextInput::make('chain_title')
                     ->label('链接标题')
                     ->helperText('链接标题，不填则默认为未命名')
                     ->maxLength(255),
-                    
+
                 Forms\Components\Select::make('group_id')
                     ->relationship('group', 'group_name')
                     ->label('所属分组')
                     ->searchable()
                     ->preload()
                     ->helperText('所属分组，不填则默认使用账号的首个分组'),
-                    
+
                 // Forms\Components\TextInput::make('domain')
                 //     ->numeric()
                 //     ->label('专属域名'),
-                    
+
                 Forms\Components\TextInput::make('target_url')
                     ->label('目标网址')
                     ->required()
@@ -49,8 +50,8 @@ class ChainResource extends Resource
                     ->label('有效期')
                     ->helperText('有效期为空时，链接永久有效')
                     ->native(false),
-                    
-                
+
+
             ]);
     }
 
@@ -61,13 +62,13 @@ class ChainResource extends Resource
                 Tables\Columns\TextColumn::make('chain')
                     ->label('链接后缀')
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('group.group_name')
                     ->label('所属分组')
                     ->sortable()
                     ->placeholder('未分组')
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('target_url')
                     ->label('目标网址'),
 
@@ -80,34 +81,37 @@ class ChainResource extends Resource
 
                 Tables\Columns\TextColumn::make('domain_url')
                     ->label('专属域名'),
-                
+
                 Tables\Columns\TextColumn::make('domain_status')
-                    ->label('域名状态'),
+                    ->label('域名状态')
+                    ->badge(),
+
 
                 Tables\Columns\TextColumn::make('type')
-                    ->label('链接类型'),
-                    
+                    ->label('链接类型')
+                    ->formatStateUsing(fn (ChainType $state) => $state->label()),
+
                 Tables\Columns\TextColumn::make('status')
                     ->label('状态')
                     ->badge(),
-                    
+
                 Tables\Columns\TextColumn::make('pv_today')
                     ->label('今日访问')
                     ->numeric()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('pv_history')
                     ->label('历史访问')
                     ->numeric()
                     ->sortable(),
 
-                
+
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('group')
                     ->relationship('group', 'group_name')
                     ->label('分组'),
-                    
+
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'active' => '激活',
@@ -135,4 +139,4 @@ class ChainResource extends Resource
             'edit' => Pages\EditChain::route('/{record}/edit'),
         ];
     }
-} 
+}
