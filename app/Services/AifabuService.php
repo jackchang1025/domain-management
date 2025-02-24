@@ -56,6 +56,13 @@ class AifabuService
         });
     }
 
+    public function syncGroupChains(): void
+    {
+        $this->syncGroup();
+
+        $this->syncChain();
+    }
+
     public function syncChain(): void
     {
 
