@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
 use App\Services\Integrations\Aifabu\AifabuConnector;
 use App\Services\Integrations\Aifabu\Resource\ChainResource;
 use Saloon\Http\Response;
-
-class AifabuUpdaterTest extends TestCase
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+class AifabuUpdaterTest extends BaseTestCase
 {
     use RefreshDatabase;
 
@@ -27,10 +28,10 @@ class AifabuUpdaterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->serviceMock = Mockery::mock(AifabuService::class);
         $this->loggerMock = Mockery::mock(LoggerInterface::class);
-        
+
         $this->updater = new AifabuUpdater(
             $this->serviceMock,
             $this->loggerMock
@@ -43,10 +44,8 @@ class AifabuUpdaterTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @group prerequisites
-     */
+    #[Test]
+    #[group('prerequisites')]
     public function it_should_throw_exception_when_no_active_domain_exists()
     {
         // 只创建过期域名
@@ -58,11 +57,9 @@ class AifabuUpdaterTest extends TestCase
         $this->updater->execute();
     }
 
-    /**
-     * @test
-     * @group chain_update
-     */
-    public function it_should_successfully_update_chains_from_expired_to_active_domain()
+    #[Test]
+    #[group('chain_update')]
+    public function it_should_successfully_update_chains_from_expired_to_active_domain(): void
     {
         // 创建活跃域名
         $activeDomain = Domain::factory()
@@ -125,10 +122,8 @@ class AifabuUpdaterTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    /**
-     * @test
-     * @group chain_update
-     */
+    #[Test]
+    #[group('chain_update')]
     public function it_should_handle_empty_chain_collection()
     {
         // 创建活跃和过期域名
@@ -147,10 +142,8 @@ class AifabuUpdaterTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    /**
-     * @test
-     * @group chain_update
-     */
+    #[Test]
+    #[group('chain_update')]
     public function it_should_handle_multiple_expired_domains()
     {
         // 创建活跃域名
@@ -162,7 +155,7 @@ class AifabuUpdaterTest extends TestCase
         $expiredDomain1 = Domain::factory()
             ->withDomain('https://expired1.com')
             ->create(['status' => 'expired']);
-        
+
         $expiredDomain2 = Domain::factory()
             ->withDomain('https://expired2.com')
             ->create(['status' => 'expired']);
@@ -225,10 +218,8 @@ class AifabuUpdaterTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    /**
-     * @test
-     * @group chain_update
-     */
+    #[Test]
+    #[group('chain_update')]
     public function it_should_handle_api_exception()
     {
         // 创建活跃域名
@@ -271,7 +262,7 @@ class AifabuUpdaterTest extends TestCase
         $this->loggerMock->shouldReceive('error')->once()->with(
             '更新链接时发生异常',
             Mockery::on(function ($args) {
-                return $args['chain'] === 'test-chain' && 
+                return $args['chain'] === 'test-chain' &&
                        $args['error'] === 'API Connection Error';
             })
         );
@@ -285,10 +276,8 @@ class AifabuUpdaterTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    /**
-     * @test
-     * @group chain_update
-     */
+    #[Test]
+    #[group('chain_update')]
     public function it_should_handle_api_response_without_required_fields()
     {
         // 创建活跃域名
@@ -353,10 +342,8 @@ class AifabuUpdaterTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-        /**
-     * @test
-     * @group chain_update
-     */
+    #[Test]
+    #[group('chain_update')]
     public function it_should_not_domain_exception()
     {
         // 创建活跃域名
@@ -375,7 +362,7 @@ class AifabuUpdaterTest extends TestCase
 
 
         $this->serviceMock->shouldReceive('syncGroupChains')->once();
-    
+
 
         // 模拟日志记录
         $this->loggerMock->shouldReceive('info')->once();
@@ -389,4 +376,4 @@ class AifabuUpdaterTest extends TestCase
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertCount(0, $result);
     }
-} 
+}
