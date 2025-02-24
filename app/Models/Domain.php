@@ -8,11 +8,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Redis;
 
 /**
+ * 
+ *
+ * @property int $id
  * @property string $domain
  * @property string $status
- * @property int $group_id
- * @property \Carbon\Carbon $registered_at
- * @property \Carbon\Carbon $expires_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property int|null $group_id
+ * @property-read \App\Models\Group|null $group
+ * @method static \Database\Factories\DomainFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereDomain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Domain extends Model
 {
@@ -22,11 +39,6 @@ class Domain extends Model
         'domain',
         'status',
         'group_id',
-    ];
-
-    protected $casts = [
-        'registered_at' => 'date',
-        'expires_at' => 'date',
     ];
 
     public function group(): BelongsTo

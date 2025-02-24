@@ -6,7 +6,7 @@ use App\Filament\Resources\ChainResource;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
 use App\Services\AifabuService;
-use http\Exception\InvalidArgumentException;
+use \InvalidArgumentException;
 
 class CreateChain extends CreateRecord
 {

@@ -9,7 +9,7 @@ class GroupFactory extends Factory
 {
     protected $model = Group::class;
 
-    public function definition(): array
+    public function definition():array
     {
         return [
             'name' => $this->faker->word,

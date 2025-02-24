@@ -13,9 +13,16 @@ class DomainFactory extends Factory
     public function definition(): array
     {
         return [
-            'domain' => $this->faker->domainName,
+            'domain' => $this->faker->domainName(),
             'status' => 'active',
             'group_id' => Group::factory(),
         ];
     }
-} 
+
+    public function withDomain(string $domain): DomainFactory
+    {
+        return $this->state([
+            'domain' => $domain
+        ]);
+    }
+}
