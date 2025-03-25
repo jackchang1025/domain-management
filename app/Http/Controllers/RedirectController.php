@@ -23,7 +23,6 @@ class RedirectController extends Controller
 
         $userAgent = $request->header('User-Agent');
         
-        return view('boot-page');
         if (Config::get('wechat.detect_wechat_environment') && $this->isWechatBrowser($userAgent)) {
             return view('boot-page');
         }
