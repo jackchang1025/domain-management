@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class RedirectController extends Controller
 {
@@ -16,18 +17,14 @@ class RedirectController extends Controller
 
     public function redirectDomain(Request $request): RedirectResponse|\Illuminate\Http\Response|\Illuminate\View\View
     {
-        // 如果是OPTIONS请求直接返回空响应
         if ($request->isMethod('OPTIONS')) {
             return response()->noContent();
         }
 
-        // 获取用户代理
         $userAgent = $request->header('User-Agent');
         
-        // 检测微信环境
-        $isWechat = $this->isWechatBrowser($userAgent);
-        
-        if ($isWechat) {
+        return view('boot-page');
+        if (Config::get('wechat.detect_wechat_environment') && $this->isWechatBrowser($userAgent)) {
             return view('boot-page');
         }
 
