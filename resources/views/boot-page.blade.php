@@ -63,6 +63,7 @@
 	.img-container {
 		margin: 0 auto;
 		max-width: 100%;
+		max-height: 100%;
 		padding: 10px;
 		overflow: hidden;
 	}
