@@ -3,14 +3,16 @@
 namespace App\Services\Integrations\Aifabu;
 
 use Saloon\Http\Connector;
-use App\Services\Integrations\Trait\HasLogger;
+use Weijiajia\SaloonphpLogsPlugin\HasLogger;
 use Saloon\Http\Response;
 use App\Services\Integrations\Aifabu\Resource\GroupResource;
 use App\Services\Integrations\Aifabu\Resource\ChainResource;
 use Saloon\Http\Auth\QueryAuthenticator;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use App\Services\Integrations\Trait\HasCookie;
+use Weijiajia\SaloonphpLogsPlugin\Contracts\HasLoggerInterface;
 
-class AifabuConnector extends Connector
+class AifabuConnector extends Connector implements HasLoggerInterface
 {
     use HasLogger;
     use AlwaysThrowOnErrors;

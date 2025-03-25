@@ -5,9 +5,11 @@ namespace App\Services\Integrations\Forage;
 use App\Services\Integrations\Forage\Resource\LoginResource;
 use App\Services\Integrations\Forage\Resource\DomainResource;
 use Saloon\Http\Connector;
-use App\Services\Integrations\Trait\HasLogger;
+use Weijiajia\SaloonphpLogsPlugin\HasLogger;
 use App\Services\Integrations\Trait\HasCookie;
-class ForageConnector extends Connector
+use Weijiajia\SaloonphpLogsPlugin\Contracts\HasLoggerInterface;
+
+class ForageConnector extends Connector implements HasLoggerInterface
 {
     use HasLogger;
     use HasCookie;

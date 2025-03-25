@@ -4,17 +4,17 @@ namespace App\Services\Integrations\ShortUrl;
 
 use App\Services\Integrations\ShortUrl\Request\ListShortUrlRequest;
 use Saloon\Http\Connector;
-use App\Services\Integrations\Trait\HasLogger;
 use App\Services\Integrations\ShortUrl\Resource\Resource;
 use Saloon\PaginationPlugin\Contracts\HasPagination;
 use App\Services\Integrations\ShortUrl\Pagination\ShortUrlPaginator;
 use App\Services\Integrations\Trait\HasCookie;
+use Weijiajia\SaloonphpLogsPlugin\HasLogger;
+use Weijiajia\SaloonphpLogsPlugin\Contracts\HasLoggerInterface;
 
-class ShortUrlConnector extends Connector implements HasPagination
+class ShortUrlConnector extends Connector implements HasLoggerInterface, HasPagination
 {
     use HasCookie;
     use HasLogger;
-
     public function resolveBaseUrl(): string
     {
         return 'https://hm.dw.googlefb.sbs';

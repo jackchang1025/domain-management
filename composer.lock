@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88b0dd9bff87aa9583d95f618fbc839b",
+    "content-hash": "c3fa6990954188e154f23026edefaa64",
     "packages": [
         {
             "name": "amphp/amp",
@@ -9095,6 +9095,54 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "weijiajia/saloonphp-logs-plugin",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jackchang1025/saloonphp-logs-plugin.git",
+                "reference": "b341c8a87bedffbb358caf571bdab2d15847f7f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jackchang1025/saloonphp-logs-plugin/zipball/b341c8a87bedffbb358caf571bdab2d15847f7f1",
+                "reference": "b341c8a87bedffbb358caf571bdab2d15847f7f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "psr/log": "^3.0",
+                "saloonphp/saloon": "^3.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Weijiajia\\SaloonphpLogsPlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "weijiajia",
+                    "email": "123456@qq.com"
+                }
+            ],
+            "description": "SaloonPHP Logs Plugin",
+            "keywords": [
+                "logs",
+                "plugin",
+                "saloonphp"
+            ],
+            "support": {
+                "issues": "https://github.com/jackchang1025/saloonphp-logs-plugin/issues",
+                "source": "https://github.com/jackchang1025/saloonphp-logs-plugin/tree/main"
+            },
+            "time": "2025-03-21T10:37:02+00:00"
         }
     ],
     "packages-dev": [
@@ -11674,7 +11722,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "weijiajia/saloonphp-logs-plugin": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

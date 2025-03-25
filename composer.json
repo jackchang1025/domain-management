@@ -14,7 +14,8 @@
         "saloonphp/pagination-plugin": "^2.2",
         "saloonphp/saloon": "^3.10",
         "spatie/laravel-data": "^4.13",
-        "symfony/dom-crawler": "^7.2"
+        "symfony/dom-crawler": "^7.2",
+        "weijiajia/saloonphp-logs-plugin": "dev-main"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.5",
