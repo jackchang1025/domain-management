@@ -284,10 +284,10 @@ FORAGE_PASSWORD=your_password
 -   自动更新被屏蔽域名的状态
 
 配置：
+ | 微信域名检测 | `RRBAY_API_KEY=your_api_key`                                       | 微信域名检测         | [微信检测](http://wx.rrbay.com)          |
+    | 微信域名检测 |                                                                    | 微信域名检测         | [微信检测](https://cgi.urlsec.qq.com/index.php)|
+    | 微信域名检测 |  `TWOCAPTCHA_API_KEY`                                              | 微信域名检测         | [微信检测](https://urlsec.qq.com/check.html)|
 
-```
-WX_CHECK_KEY=your_api_key
-```
 
 ### 6. 微信环境检测
 

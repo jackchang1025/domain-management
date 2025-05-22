@@ -34,9 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'wx_check' => [
-        'key' => env('WX_CHECK_KEY'),
-    ],
-
 ];
