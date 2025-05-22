@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "ext-openssl": "*",
+        "2captcha/2captcha": "^1.2",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
@@ -15,7 +16,8 @@
         "saloonphp/saloon": "^3.10",
         "spatie/laravel-data": "^4.13",
         "symfony/dom-crawler": "^7.2",
-        "weijiajia/saloonphp-logs-plugin": "dev-main"
+        "weijiajia/saloonphp-logs-plugin": "dev-main",
+        "weijiajia/tencent-url-detection": "dev-main"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.5",
@@ -75,6 +77,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

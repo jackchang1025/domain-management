@@ -106,6 +106,14 @@ example3.com')
                         'active' => 'success',
                         'expired' => 'danger',
                     }),
+                Tables\Columns\TextColumn::make('wording_title')
+                    ->label('拦截原因')
+                    ->badge()
+                    ->color('danger'),
+                Tables\Columns\TextColumn::make('wording')
+                    ->label('拦截描述')
+                    ->badge()
+                    ->color('danger'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')

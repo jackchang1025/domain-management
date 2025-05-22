@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Services\DomainComparator;
 /**
- *
+ * 
  *
  * @property int $id 主键ID
  * @property string|null $chain_title 链接标题

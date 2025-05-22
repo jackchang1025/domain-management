@@ -5,9 +5,12 @@ namespace App\Console\Commands;
 use App\Models\Domain;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Cache\Lock;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Weijiajia\TencentUrlDetection\DriversManager;
+use Psr\Log\LoggerInterface;
+use Filament\Notifications\Notification;
+use App\Models\User;
 
 class CheckDomains extends Command
 {
@@ -18,7 +21,7 @@ class CheckDomains extends Command
 
     protected bool $isLocked = false;
 
-    public function handle(): void
+    public function handle(DriversManager $driversManager,LoggerInterface $logger): void
     {
         // 先获取需要检测的域名数量
         $total = Domain::where('status', 'active')->count();
@@ -36,34 +39,40 @@ class CheckDomains extends Command
         $this->isLocked = true;
 
         try {
-            $apiKey = config('services.wx_check.key');
 
             Domain::where('status', 'active')
-                ->chunkById(100, function ($domains) use ($apiKey) {
+                ->chunkById(100, function ($domains) use ($driversManager,$logger) {
                     foreach ($domains as $domain) {
                         // 记录开始时间
                         $start = microtime(true);
 
                         try {
 
-                            $response = Http::timeout(15)
-                                ->get('http://wx.rrbay.com/pro/wxUrlCheck2.ashx', [
-                                    'key' => $apiKey,
-                                    'url' => $domain->domain
-                                ]);
+                                $response = $driversManager->forgetDrivers()
+                                    ->driver()
+                                    ->withLogger($logger)
+                                    ->check($domain->domain);
 
-                                $this->info(now()->format('Y-m-d H:i:s') . " domain:" . $domain->domain . " result:" . $response->body());
+                                $this->info(now()->format('Y-m-d H:i:s') . " domain:" . $domain->domain . " result:" . $response->getResponse()->body());
 
-                                Log::info("域名检测：{$domain->domain} body:{$response->body()}");
+                                Log::info("域名检测：{$domain->domain} body:{$response->getResponse()->body()}");
 
-                                if($response->successful() && $response->json('Code') === '101'){
-                                    $domain->update(['status' => 'expired']);
+                                if($response->isWeChatRiskWarning()){
+                                    $domain->update(['status' => 'expired','wording_title' => $response->getWordingTitle(),'wording' => $response->getWording()]);
+
+                                    Notification::make()
+                                    ->title("{$domain->domain} 域名检测被拦截")
+                                    ->body($response->getWording())
+                                    ->warning()
+                                    ->sendToDatabase(User::first());
                                 }
 
                         } catch (\Exception $e) {
                             Log::error("域名检测异常：{$domain->domain}", [
                                 'error' => $e->getMessage()
                             ]);
+
+                            $this->error("域名检测异常：{$domain->domain} 错误信息：{$e->getMessage()}");
                         }
 
                         // 计算实际耗时并确保至少等待25秒

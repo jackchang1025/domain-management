@@ -16,7 +16,7 @@ class ShortUrlService
 {
     private const LOGIN_LINK_SELECTOR = 'a[href*="/User/login"]';
 
-    protected ShortUrlConnector $connector;
+    protected ?ShortUrlConnector $connector = null;
     protected bool $isLogin = false;
 
     public function __construct(
@@ -24,7 +24,14 @@ class ShortUrlService
         protected string $password,
         protected string $cookieFile,
     ) {
-        $this->initializeConnector();
+    }
+
+    public function connector(): ShortUrlConnector
+    {
+        if (!$this->connector) {
+            $this->initializeConnector();
+        }
+        return $this->connector;
     }
 
     private function initializeConnector(): void
@@ -54,12 +61,12 @@ class ShortUrlService
 
     public function home(): Response
     {
-        return $this->connector->getResource()->home();
+        return $this->connector()->getResource()->home();
     }
 
     public function login(): Response
     {
-        return $this->connector->getResource()->login($this->account, $this->password);
+        return $this->connector()->getResource()->login($this->account, $this->password);
     }
 
     /**
@@ -70,7 +77,7 @@ class ShortUrlService
      */
     public function updateShortUrl(string $code, string $url): Response
     {
-        $response =  $this->connector->getResource()->updateShortUrl($code, $url);
+        $response =  $this->connector()->getResource()->updateShortUrl($code, $url);
 
         if ($response->successful() && $response->json('status') !== 1) {
             throw new \Exception("更新失败: {$response->json('msg')}");
@@ -81,17 +88,17 @@ class ShortUrlService
 
     public function deleteShortUrl(string $code): Response
     {
-        return $this->connector->getResource()->deleteShortUrl($code);
+        return $this->connector()->getResource()->deleteShortUrl($code);
     }
 
     public function createShortUrl(string $url): Response
     {
-        return $this->connector->getResource()->createShortUrl($url);
+        return $this->connector()->getResource()->createShortUrl($url);
     }
 
     public function getTotalPage(): ShortUrlList
     {
-        $paginator = $this->connector->paginate(
+        $paginator = $this->connector()->paginate(
             new ListShortUrlRequest()
         );
 

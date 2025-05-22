@@ -29,6 +29,10 @@ use Illuminate\Support\Facades\Redis;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereUpdatedAt($value)
+ * @property string|null $wording_title
+ * @property string|null $wording
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereWording($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereWordingTitle($value)
  * @mixin \Eloquent
  */
 class Domain extends Model
@@ -39,6 +43,8 @@ class Domain extends Model
         'domain',
         'status',
         'group_id',
+        'wording_title',
+        'wording',
     ];
 
     public function group(): BelongsTo

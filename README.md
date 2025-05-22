@@ -99,8 +99,13 @@
     | 爱发布   | `AIFABU_TOKEN=your_token_here`                                         | 爱发布 API 服务      | [爱短链](https://openapi.aifabu.com)     |
     | 短链接   | `SHORT_URL_ACCOUNT=your_account`<br>`SHORT_URL_PASSWORD=your_password` | 短链接服务           | [短链接平台](https://hm.dw.googlefb.sbs) |
     | Forage   | `FORAGE_ACCOUNT=your_account`<br>`FORAGE_PASSWORD=your_password`       | 二维码服务           | [草料二维码](https://user.cli.im)        |
-    | 微信检测 | `WX_CHECK_KEY=your_api_key`                                            | 微信域名检测         | [微信检测](http://wx.rrbay.com)          |
+    | 微信域名检测 | `RRBAY_API_KEY=your_api_key`                                       | 微信域名检测         | [微信检测](http://wx.rrbay.com)          |
+    | 微信域名检测 |                                                                    | 微信域名检测         | [微信检测](https://cgi.urlsec.qq.com/index.php)|
+    | 微信域名检测 |  `TWOCAPTCHA_API_KEY`                                              | 微信域名检测         | [微信检测](https://urlsec.qq.com/check.html)|
     | 微信环境 | `DETECT_WECHAT_ENVIRONMENT=true`                                       | 是否开启微信环境检测 | -                                        |
+
+### 配置默认微信检测 
+`URL_DETECTION_DRIVER=two_captcha`
 
 7. **完成安装**
 
