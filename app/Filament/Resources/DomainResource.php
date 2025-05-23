@@ -9,7 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-
+use Illuminate\Support\Collection;
 class DomainResource extends Resource
 {
     protected static ?string $model = Domain::class;
@@ -135,6 +135,25 @@ example3.com')
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                Tables\Actions\BulkAction::make('export_domain')
+                ->label('批量导出')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('info')
+                ->action(function (Collection $records,Table $table) {
+
+                    $content = $records->reduce(function (string $carry, Domain $item) {
+                        $carry .= sprintf(
+                            "%s----%s----%s----%s----%s\n", 
+                            $item->domain,$item->status, $item->wording_title ?? 'None', $item->wording ?? 'None', $item->updated_at
+                        );
+                        return $carry;
+                    }, '');
+
+                    return response()->streamDownload(function () use ($content) {
+                        echo $content;
+                    }, 'domain_export_' . now()->format('YmdHis') . '.txt');
+                }),
             ]);
     }
 
